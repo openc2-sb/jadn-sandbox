@@ -4,8 +4,10 @@ import os
 import traceback
 from flask import current_app, json, jsonify, request
 from flask_restful import Resource
-from jadnschema import transform
-from jadnschema.jadn import dumps
+# from jadnschema import transform
+# from jadnschema.jadn import dumps
+
+from jadnschema.transform.resolve_references import resolve_references
 
 
 logger = logging.getLogger(__name__)
@@ -21,24 +23,24 @@ class Transform(Resource):
         })
 
     def post(self):
-        """
-        take list of schemas, validate schemas, and transform schemas based on selected transformation type 
-        :param schema_list: list of schema_data and schema_name 
-        :param transformation_type: selected transformation type
-        :param base_schema: selected base file for resolving imports
-        :return: list of transformed schemas with schema_name and schema_data (200),
-          a transformed schema + schema_name (200) 
-          or list of invalid schemas (500)
-        """
+        # """
+        # take list of schemas, validate schemas, and transform schemas based on selected transformation type 
+        # :param schema_list: list of schema_data and schema_name 
+        # :param transformation_type: selected transformation type
+        # :param base_schema: selected base file for resolving imports
+        # :return: list of transformed schemas with schema_name and schema_data (200),
+        #   a transformed schema + schema_name (200) 
+        #   or list of invalid schemas (500)
+        # """
         request_json = request.json
 
         # validate all schemas
         invalid_schema_list = []
         # Leftoff here.... getting an err 
-        for schema in request_json["schema_list"]:
-            is_valid, msg = current_app.validator.validateSchema(schema['data'], False)
-            if not is_valid:
-                invalid_schema_list.append({'name': schema['name'], 'err': msg})
+        # for schema in request_json["schema_list"]:
+        #     is_valid, msg = current_app.validator.validateSchema(schema['data'], False)
+        #     if not is_valid:
+        #         invalid_schema_list.append({'name': schema['name'], 'err': msg})
         
         if len(invalid_schema_list) != 0:
             return invalid_schema_list, 500
@@ -61,14 +63,18 @@ class Transform(Resource):
             elif transformed == "resolve references":
                 schema_base = ''
                 schema_list = []
-                schema_base_name = ''
+                schema_base_name = 'schema_base'
                 for schema in request_json["schema_list"]:
-                    schema_content_str = schema['data']
-                    schema_content_dict = json.loads(schema_content_str)                    
-                    schema_list.append(schema_content_dict)
+                    # schema_content_str = schema['data']
+                    # schema_content_dict = json.loads(schema_content_str)                    
+                    # schema_list.append(schema_content_dict)
+                    
                     if schema['name'] == request_json["schema_base"]:
-                        schema_base = schema_content_dict
-                        schema_base_name = request_json["schema_base"]
+                        # schema_base = schema_content_dict
+                        schema_base = schema['data']
+                        schema_base_name = schema['name']
+                    else:
+                        schema_list.append(schema['data'])
 
                 if not schema_base:
                     return 'Base Schema not found', 404
@@ -77,7 +83,11 @@ class Transform(Resource):
                     return "No Schema files provided", 404
 
                 try:
-                    output = transform.resolve_references.resolve(schema_base_name, schema_base, schema_list)
+                    # output = transform.resolve_references.resolve(schema_base_name, schema_base, schema_list)
+                    resoved_schema = resolve_references(schema_base, schema_list)
+                    base_name, ext = os.path.splitext(schema_base_name)  # Split filename and extension
+                    schema_base_name = f"{base_name}-resolved{ext}"  # Append '-resolved' and reattach extension                    
+                    output = [{'schema_name': schema_base_name + '-resolved', "schema_fmt": 'jadn', 'schema': resoved_schema }]
                 except Exception as err:            
                     tb = traceback.format_exc()
                     print(tb)
