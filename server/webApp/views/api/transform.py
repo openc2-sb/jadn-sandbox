@@ -4,8 +4,6 @@ import os
 import traceback
 from flask import current_app, json, jsonify, request
 from flask_restful import Resource
-# from jadnschema import transform
-# from jadnschema.jadn import dumps
 
 from jadnschema.transform.resolve_references import resolve_references
 
@@ -32,16 +30,10 @@ class Transform(Resource):
         #   a transformed schema + schema_name (200) 
         #   or list of invalid schemas (500)
         # """
+
         request_json = request.json
 
-        # validate all schemas
         invalid_schema_list = []
-        # Leftoff here.... getting an err 
-        # for schema in request_json["schema_list"]:
-        #     is_valid, msg = current_app.validator.validateSchema(schema['data'], False)
-        #     if not is_valid:
-        #         invalid_schema_list.append({'name': schema['name'], 'err': msg})
-        
         if len(invalid_schema_list) != 0:
             return invalid_schema_list, 500
              
@@ -84,7 +76,6 @@ class Transform(Resource):
                     return "No Schema files provided", 404
 
                 try:
-                    # output = transform.resolve_references.resolve(schema_base_name, schema_base, schema_list)
                     resoved_schema = resolve_references(schema_base, schema_list)
                     base_name, ext = os.path.splitext(schema_base_name)  # Split filename and extension
                     schema_base_name = f"{base_name}-resolved{ext}"  # Append '-resolved' and reattach extension                    
