@@ -64,17 +64,18 @@ class Transform(Resource):
                 schema_base = ''
                 schema_list = []
                 schema_base_name = 'schema_base'
+
                 for schema in request_json["schema_list"]:
-                    # schema_content_str = schema['data']
-                    # schema_content_dict = json.loads(schema_content_str)                    
-                    # schema_list.append(schema_content_dict)
-                    
+
+                    data = schema.get('data')
+                    if isinstance(data, str):
+                        data = json.loads(data)
+
                     if schema['name'] == request_json["schema_base"]:
-                        # schema_base = schema_content_dict
-                        schema_base = schema['data']
+                        schema_base = data
                         schema_base_name = schema['name']
                     else:
-                        schema_list.append(schema['data'])
+                        schema_list.append(data)
 
                 if not schema_base:
                     return 'Base Schema not found', 404
