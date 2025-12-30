@@ -6,7 +6,7 @@
 
 ## Background
 
-The JADN Sandbox provides the ability to create, convert, translate, transform, and validate JADN compliant schemas. In addition, for applications that communicate via messaging, the app provides the ability to create and validate messages against a schema, as well as, generate test messages based on the provided schema. Within JADN Sandbox users can interact with the JADN information modeling tools and create schemas or messages based on their application or systems needs or just to learn more about JADN with a hands on approach.
+The JADN Sandbox provides the ability to create, convert, translate, transform, visualize and validate JADN compliant schemas. In addition, for applications that communicate via messaging, the app provides the ability to create and validate data against a schema, as well as, generate test data based on the provided schema. Within JADN Sandbox users can interact with the JADN information modeling tools and create schemas or data based on their application or systems needs or just to learn more about JADN with a hands on approach.
 [JADN Sandbox Walkthrough PDF](https://github.com/ScreamBun/jadn-sandbox/blob/develop/documentation/JADNSandboxInfo.pdf).
 
 ## Quick Startup
@@ -168,35 +168,3 @@ Need to start Ruby Container when you are developing and want CBOR conversion lo
     * install the updated jadnschema wheel
 
   Note: If you update the whl filename/version, then the Dockerfile will need to be updated to use this new filename as well.
-
-## Client
-
-* React single page application
-
-## Server
-
-* Flask restful server with react app as GUI
-
-### Serving the client via the server
-
-1. Build the client as specified in the client readme
-2. Copy the contents of `client/build/assets` directory to `server/webApp/static`
-3. Merge the folders and replace what is currently in the folders
-
-* Note: The following files are used by the endpoints page and should not be replaced (Roboto & Lato fonts are also used by the client application)
-* `server/webApp/static/css/styles.min.css`
-* `server/webApp/static/js/scripts.min.js`
-* `server/webApp/static/assets/fonts/Lato-Bold.ttf`
-* `server/webApp/static/assets/fonts/Lato-Italic.ttf`
-* `server/webApp/static/assets/fonts/Lato-Light.ttf`
-* `server/webApp/static/assets/fonts/Lato-Regular.ttf`
-* `server/webApp/static/assets/fonts/Roboto-Bold.ttf`
-* `server/webApp/static/assets/fonts/Roboto-Light.ttf`
-* `server/webApp/static/assets/fonts/Roboto-Medium.ttf`
-* `server/webApp/static/assets/fonts/Roboto-Regular.ttf`
-
-4. Move the index file that was copied to the server templates directory
-
-* Server: `server/webApp/templates/`
-
-5. Start the server and navigate to the web browser page to verify the client is served correctly.
