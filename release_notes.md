@@ -1,6 +1,29 @@
 
 # JADN Sandbox Release Notes
 
+## 🚀 Release v0.18.0
+
+This release improves schema transformation capabilities and makes schema validation errors easier to understand and resolve.
+
+✨ What’s New
+
+JADN 2.0 Support in Schema Transformation
+
+Transformation Schema Resolver function now supports JADN 2.0.
+One Base schema may reference multiple other JADN schemas, as long as their namespaces align
+Enables more flexible and modular schema composition
+
+🔍 Clearer Validation Errors
+
+Improved error messages for schema inheritance validation
+Errors are now more descriptive and user-friendly, helping to identify and fix issues faster
+
+🧩 Why It Matters
+
+Easier reuse of JADN Schemas across projects
+Better feedback when working with complex schema hierarchies
+Improved alignment with the latest JADN standard
+
 ## v0.17.0
 
 Version 0.17.0 delivers a more stable, consistent, and user-friendly experience across the JADN Sandbox. This release focuses on improving data translation reliability, enhancing error feedback, strengthening validation alignment, and addressing several long-standing UX issues.
