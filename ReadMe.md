@@ -43,44 +43,44 @@ Prerequisites:
 
 2. From commandline, go to the directory where you would like the application to live, here's an example:
 
-   ```bash
-   cd /home/username/workspace
-   ```
+```bash
+cd /home/username/workspace
+```
 
 3. Using git, clone the jadn-sandbox repo to your local directory
 
-   ```bash
-   git clone https://github.com/ScreamBun/jadn-sandbox.git
-   ```
+```bash
+git clone https://github.com/ScreamBun/jadn-sandbox.git
+```
 
 4. (Optional, specific to Linux and Mac) Create a [virtual environment](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/) for the app
 
 5. Run the startup script to install the app's dependencies and fire up it's servers
 
-   ```bash
-   ./startup.sh
-   ```
+```bash
+./startup.sh
+```
 
 ### Alternate Startup
 
 1. Fire up server
 
-  ```bash
-  cd server
-  ./start.sh
-  ```
+```bash
+cd server
+./start.sh
+```
 
 2. In another terminal, fire up the client
 
 yarn build
 yarn start
 
-  ```bash
-  cd client
-  yarn
-  yarn build
-  yarn start
-  ```
+```bash
+cd client
+yarn
+yarn build
+yarn start
+```
 
 ## How To
 
@@ -96,32 +96,47 @@ Important Notes:
 
 1. Run this command once to build the image and push to DockerHub:
 
-  ```bash
-  python ./docker_push.py
-  ```
+```bash
+python ./docker_push.py
+```
 
 2. To start your image, enter the following, this will start the image without rebuilding
 
-  ```bash
-  ./docker_run.sh
-  ```
+```bash
+./docker_run.sh
+```
 
 3. If the latest tag is not updating in Docker Hub, take the following steps to realign the tag
 
-  ```bash
-    docker tag screambunn/jadn_sandbox:<version> screambunn/jadn_sandbox:latest
-    docker push screambunn/jadn_sandbox:latest
-    ```
+Latest:
+```bash
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  -f ./sever/Dockerfile \
+  -t screambunn/jadn_sandbox:latest \
+  --push .
+```
+
+Specific Version:
+```bash
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  -f ./sever/Dockerfile \
+  -t screambunn/jadn_sandbox:<version> \
+  --push .  
+```
 
 Or run the following, you can replace 'latest' with a specific version if you have previously built it or pulled it (see quick start).
 
-  ```bash
-  docker run --rm -p 8082:8082 screambunn/jadn_sandbox:latest
-  ```
+```bash
+docker run --rm -p 8082:8082 screambunn/jadn_sandbox:latest
+```
 
-3. Once the build is complete go to here in your browser to verify and run smoke tests
+4. Once the build is complete go to here in your browser to verify and run smoke tests
 
-  <http://localhost:8082/>
+```html
+<http://localhost:8082/>
+```
 
 ### Create a jadnschema Wheel
 
@@ -133,15 +148,15 @@ Need to start Ruby Container when you are developing and want CBOR conversion lo
 
 1. In a terminal window, from the JADN Sandbox root directory, build the image:
 
-    ```bash
-    docker build -t sb-ruby-image -f Dockerfile_sb_ruby .
-    ```
+```bash
+docker build -t sb-ruby-image -f Dockerfile_sb_ruby .
+```
 
 2. Next, build the container (/bin/bash is optional this allows you to immediately investigate the contents of the container)
 
-    ```bash
-    docker run -it --name=sb-ruby-container sb-ruby-image /bin/bash
-    ```
+```bash
+docker run -it --name=sb-ruby-container sb-ruby-image /bin/bash
+```
 
 3. Go to server / webApp / data / version.toml and change the app_mode to "local".  
 
