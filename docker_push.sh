@@ -53,12 +53,12 @@ if ! docker buildx rm jadn-multiplatform-builder 2>/dev/null; then
   echo "Warning: buildx builder 'jadn-multiplatform-builder' not found or could not be removed. Continuing..."
 fi
 docker buildx create --use --platform=linux/amd64,linux/arm64 --name jadn-multiplatform-builder
-docker buildx build --platform linux/arm64,linux/amd64 -f Dockerfile -t $NEW_IMG --push .
+docker buildx build --platform linux/arm64,linux/amd64 -f ./server/Dockerfile -t $NEW_IMG --push .
 
 {
-  docker buildx build --platform linux/arm64,linux/amd64 -f Dockerfile -t $IMG_LATEST  .
+  docker buildx build --platform linux/arm64,linux/amd64 -f ./server/Dockerfile -t $IMG_LATEST --push .
 } || {
   exit $1
 }
 
-docker push $IMG_LATEST
+echo "Docker images pushed: $NEW_IMG and $IMG_LATEST"

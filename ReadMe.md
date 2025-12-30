@@ -108,9 +108,22 @@ python ./docker_push.py
 
 3. If the latest tag is not updating in Docker Hub, take the following steps to realign the tag
 
+Latest:
 ```bash
-docker tag screambunn/jadn_sandbox:<version> screambunn/jadn_sandbox:latest
-docker push screambunn/jadn_sandbox:latest
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  -f ./sever/Dockerfile \
+  -t screambunn/jadn_sandbox:latest \
+  --push .
+```
+
+Specific Version:
+```bash
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  -f ./sever/Dockerfile \
+  -t screambunn/jadn_sandbox:<version> \
+  --push .  
 ```
 
 Or run the following, you can replace 'latest' with a specific version if you have previously built it or pulled it (see quick start).
